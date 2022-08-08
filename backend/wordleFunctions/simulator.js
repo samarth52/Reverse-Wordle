@@ -1,6 +1,6 @@
 // const logger = require('../utils/logger')
 
-const wordleSimulator = (word, guess) => {
+const simulator = (word, guess) => {
   // logger.info(word, guess)
   const letters = {} // holds characters and their indices that correspond to yellow and black tiles
   const guessEmoji = ['⬛', '⬛', '⬛', '⬛', '⬛'] // array respresenting the conversion of the guess into colored tiles
@@ -27,4 +27,4 @@ const wordleSimulator = (word, guess) => {
   return toReturn
 }
 
-module.exports = wordleSimulator
+module.exports = simulator

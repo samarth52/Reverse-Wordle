@@ -1,7 +1,7 @@
 const logger = require('../utils/logger')
-const decoder = require('./decoder')
-const regexBuilder = require('./regexBuilder')
-const wordleSimulator = require('./wordleSimulator')
+const decoder = require('./decode')
+const regexBuilder = require('./regex')
+const wordleSimulator = require('./simulator')
 
 const main = (word, guess) => {
   // const word = 'gnawn'

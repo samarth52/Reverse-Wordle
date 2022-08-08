@@ -1,4 +1,4 @@
-const wordleSimulator = require('../wordleFunctions/wordleSimulator')
+const wordleSimulator = require('../wordleFunctions/simulator')
 
 test('two same yellows and one different yellow', () => {
   expect(wordleSimulator('funny', 'union')).toBe('🟨🟨⬛⬛🟨')
