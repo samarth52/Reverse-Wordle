@@ -2,14 +2,18 @@ const logger = require('../utils/logger')
 const tileParser = require('./parse')
 const regexBuilder = require('./regex')
 const wordleSimulator = require('./simulator')
+const webScraper = require('./webScraper')
 
-const main = (word, guess) => {
+const main = async (answer, guess) => {
   // const word = 'gnawn'
-  const tiles = wordleSimulator(word, guess)
+  const tiles = wordleSimulator(answer, guess)
   const tilePositions = tileParser(tiles)
-  const regex = regexBuilder(word, tilePositions)
+  const regex = regexBuilder(answer, tilePositions)
   logger.info(regex)
   logger.info(regex.test(guess))
+
+  const { words } = await webScraper()
+  logger.info(words.filter((word) => regex.test(word)))
 }
 
 // main('⬛⬛⬛⬛⬛')
