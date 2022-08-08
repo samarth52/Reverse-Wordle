@@ -7,13 +7,13 @@ const requestLogger = (request, response, next) => {
   if (request.method !== 'GET') {
     logger.info('Body  :', request.body)
   }
-  logger.info('---')
+  logger.info('')
   next()
 }
 
 const unknownEndpoint = (request, response) => {
   logger.info('unknown endpoint:', request.path)
-  response.status(404).json({ error: 'unknown endpoint' })
+  response.status(404).json({ error: `unknown endpoint: ${request.path}` })
 }
 
 module.exports = {
