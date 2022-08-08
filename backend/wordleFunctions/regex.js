@@ -1,26 +1,26 @@
 const logger = require('../utils/logger')
 
-const remainingLetters = (word, decoded, index) => {
+const remainingLetters = (word, tilePositions, index) => {
   let letters = ''
   for (let i = 0; i < 5; i += 1) {
-    if (i !== index && !decoded.green.includes(i) && !letters.includes(word[i])) {
+    if (i !== index && !tilePositions.green.includes(i) && !letters.includes(word[i])) {
       letters += word[i]
     }
   }
   return letters
 }
 
-const regexBuilder = (word, decoded) => {
-  logger.info(word, decoded)
+const regexBuilder = (word, tilePositions) => {
+  logger.info(word, tilePositions)
   const regexArray = ['', '', '', '', '']
-  decoded.green.forEach((index) => {
+  tilePositions.green.forEach((index) => {
     regexArray[index] = word[index]
   })
-  decoded.black.forEach((index) => {
+  tilePositions.black.forEach((index) => {
     regexArray[index] = '.'
   })
-  decoded.yellow.forEach((index) => {
-    regexArray[index] = `([${remainingLetters(word, decoded, index)}])`
+  tilePositions.yellow.forEach((index) => {
+    regexArray[index] = `([${remainingLetters(word, tilePositions, index)}])`
   })
   return RegExp(regexArray.join(''))
 }

@@ -1,13 +1,13 @@
 const logger = require('../utils/logger')
-const decoder = require('./decode')
+const tileParser = require('./parse')
 const regexBuilder = require('./regex')
 const wordleSimulator = require('./simulator')
 
 const main = (word, guess) => {
   // const word = 'gnawn'
-  const emojiString = wordleSimulator(word, guess)
-  const decoded = decoder(emojiString)
-  const regex = regexBuilder(word, decoded)
+  const tiles = wordleSimulator(word, guess)
+  const tilePositions = tileParser(tiles)
+  const regex = regexBuilder(word, tilePositions)
   logger.info(regex)
   logger.info(regex.test(guess))
 }
