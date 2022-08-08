@@ -3,17 +3,19 @@ const decoder = require('./decoder')
 const regexBuilder = require('./regexBuilder')
 const wordleSimulator = require('./wordleSimulator')
 
-const main = (emojiString) => {
-  const word = 'gnawn'
+const main = (word, guess) => {
+  // const word = 'gnawn'
+  const emojiString = wordleSimulator(word, guess)
   const decoded = decoder(emojiString)
   const regex = regexBuilder(word, decoded)
   logger.info(regex)
-  logger.info(regex.test('ginny'))
+  logger.info(regex.test(guess))
 }
 
 // main('⬛⬛⬛⬛⬛')
 // main('🟨⬛🟨🟨⬛')
-main(wordleSimulator('gnawn', 'ginny'))
+main('gnawn', 'ginny')
+main('funny', 'union')
 // main('🟩⬛🟨🟨🟨')
 // main('🟩🟩🟩🟩🟩')
 

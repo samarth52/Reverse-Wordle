@@ -20,7 +20,7 @@ const regexBuilder = (word, decoded) => {
     regexArray[index] = '.'
   })
   decoded.yellow.forEach((index) => {
-    regexArray[index] = `[${remainingLetters(word, decoded, index)}]`
+    regexArray[index] = `([${remainingLetters(word, decoded, index)}])`
   })
   return RegExp(regexArray.join(''))
 }
