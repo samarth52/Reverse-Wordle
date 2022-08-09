@@ -1,5 +1,4 @@
 name: Deploy to Heroku
-working-directory: backend
 
 on:
   pull_request:
@@ -23,5 +22,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        path: backend
     - run: npm run deploy:full
       working-directory: backend
