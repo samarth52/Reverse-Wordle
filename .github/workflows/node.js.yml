@@ -6,7 +6,7 @@ name: Node.js CI
 on:
   push:
     paths:
-      - './backend/**'
+      - 'backend/**'
   pull_request:
     branches: [ "prod", "main" ]
 
@@ -22,14 +22,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        path: backend
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        path: backend
     - run: npm ci
       working-directory: backend
     - run: npm test
