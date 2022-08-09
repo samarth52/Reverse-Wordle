@@ -10,7 +10,7 @@
     "test": "jest --verbose --runInBand",
     "build:ui": "shx rm -rf build && cd ../frontend && npm run build && shx cp -r build ../backend",
     "deploy": "cd .. && git subtree push --prefix backend heroku main",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
+    "deploy:full": "npm run build:ui && git add .. && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"
   },
   "author": "Samarth Chandna",
