@@ -13,13 +13,18 @@ const main = async (answer, guess) => {
   logger.info(regex.test(guess))
 
   const { words } = await webScraper()
-  logger.info(words.filter((word) => regex.test(word)))
+  const filtered = words.filter(
+    (word) => regex.test(word) && wordleSimulator(answer, word) === tiles,
+  )
+  logger.info(filtered)
+  logger.info(filtered.includes(guess))
 }
 
 // main('⬛⬛⬛⬛⬛')
 // main('🟨⬛🟨🟨⬛')
-main('gnawn', 'ginny')
+// main('gnawn', 'ginny')
 main('funny', 'union')
+// main('unfit', 'unite')
 // main('🟩⬛🟨🟨🟨')
 // main('🟩🟩🟩🟩🟩')
 

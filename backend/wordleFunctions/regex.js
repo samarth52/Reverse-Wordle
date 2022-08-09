@@ -20,7 +20,7 @@ const regexBuilder = (answer, tilePositions) => {
     regexArray[index] = '.'
   })
   tilePositions.yellow.forEach((index) => {
-    regexArray[index] = `([${remainingLetters(answer, tilePositions, index)}])`
+    regexArray[index] = `[${remainingLetters(answer, tilePositions, index)}]`
   })
   return RegExp(regexArray.join(''))
 }

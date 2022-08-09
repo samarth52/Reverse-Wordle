@@ -18,3 +18,6 @@ test('three different yellows and one green', () => {
 test('exact match', () => {
   expect(wordleSimulator('unfit', 'unfit')).toBe('🟩🟩🟩🟩🟩')
 })
+test('yellow on only one of same character', () => {
+  expect(wordleSimulator('slime', 'truss')).toBe('⬛⬛⬛🟨⬛')
+})
