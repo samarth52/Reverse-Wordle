@@ -2,7 +2,6 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js CI
-working-directory: backend
 
 on:
   push:
@@ -23,10 +22,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        path: backend
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+      working-directory: backend
     - run: npm test
+      working-directory: backend
