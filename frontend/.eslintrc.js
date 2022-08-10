@@ -22,10 +22,7 @@ module.exports = {
       'error',
       'never',
     ],
-    'linebreak-style': [
-      'error',
-      'windows',
-    ],
+    'linebreak-style': 'off',
     'react/jsx-filename-extension': [
       1,
       { extensions: ['.js', '.jsx'] },
