@@ -30,5 +30,9 @@ module.exports = {
       1,
       { extensions: ['.js', '.jsx'] },
     ],
+    'react/function-component-definition': [
+      'error',
+      'never',
+    ],
   },
 }
