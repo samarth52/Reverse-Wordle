@@ -8,7 +8,6 @@ import {
   messagingSenderId,
   appId,
 } from './config'
-import logger from './logger'
 
 const firebaseConfig = {
   apiKey,
@@ -19,7 +18,6 @@ const firebaseConfig = {
   appId,
 }
 
-logger.info(firebaseConfig)
 firebase.initializeApp(firebaseConfig)
 
 const uiConfig = {
