@@ -1,13 +1,21 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
+import {
+  apiKey,
+  authDomain,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
+} from './config'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBnPbaHERKfkHYSZP0vzY8s2Bsgq67Sw34',
-  authDomain: 'reverse-wordle.firebaseapp.com',
-  projectId: 'reverse-wordle',
-  storageBucket: 'reverse-wordle.appspot.com',
-  messagingSenderId: '31377035831',
-  appId: '1:31377035831:web:74d47bfd521cf1faa5a5b2',
+  apiKey,
+  authDomain,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
 }
 
 firebase.initializeApp(firebaseConfig)

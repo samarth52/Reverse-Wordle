@@ -1,11 +1,11 @@
-/* eslint-disable no-console */
 import React from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/compat/app'
 import uiConfig from './utils/firebase-config'
+import logger from './utils/logger'
 
 const App = () => {
-  console.log('here')
+  logger.info('App')
   return (
     <>
       <h1>hi</h1>
