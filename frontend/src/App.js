@@ -15,7 +15,7 @@ const App = () => {
   }, [])
 
   auth.currentUser?.getIdToken().then((idToken) => {
-    logger.info(idToken)
+    logger.info('in App.js', idToken)
   })
 
   return (

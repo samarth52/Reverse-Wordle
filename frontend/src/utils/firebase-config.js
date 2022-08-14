@@ -1,5 +1,8 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
+import axios from 'axios'
+
+import logger from './logger'
 import {
   apiKey,
   authDomain,
@@ -8,7 +11,6 @@ import {
   messagingSenderId,
   appId,
 } from './config'
-import logger from './logger'
 
 const firebaseConfig = {
   apiKey,
@@ -20,6 +22,7 @@ const firebaseConfig = {
 }
 
 firebase.initializeApp(firebaseConfig)
+const auth = firebase.auth()
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -27,15 +30,17 @@ const uiConfig = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
   ],
   callbacks: {
-    signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-      logger.info(authResult, redirectUrl)
-      logger.info(authResult.credential.idToken)
-      return false
+    signInSuccessWithAuthResult: async (authResult) => {
+      logger.info('in callback (authResult)', authResult)
+      logger.info('in callback (idToken):', authResult.user.multiFactor.user.accessToken)
+      if (authResult.additionalUserInfo.isNewUser) {
+        axios.post('/api/user/signup', {
+          idToken: authResult.user.multiFactor.user.accessToken,
+        })
+      }
     },
   },
 }
-
-const auth = firebase.auth()
 
 export {
   auth,
