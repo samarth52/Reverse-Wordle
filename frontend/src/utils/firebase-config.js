@@ -8,6 +8,7 @@ import {
   messagingSenderId,
   appId,
 } from './config'
+import logger from './logger'
 
 const firebaseConfig = {
   apiKey,
@@ -26,7 +27,11 @@ const uiConfig = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
   ],
   callbacks: {
-    signInSuccessWithAuthResult: () => false,
+    signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+      logger.info(authResult, redirectUrl)
+      logger.info(authResult.credential.idToken)
+      return false
+    },
   },
 }
 

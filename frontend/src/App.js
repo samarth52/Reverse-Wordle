@@ -14,6 +14,10 @@ const App = () => {
     return () => unregisterAuthObserver()
   }, [])
 
+  auth.currentUser?.getIdToken().then((idToken) => {
+    logger.info(idToken)
+  })
+
   return (
     <>
       <h1>hi</h1>
