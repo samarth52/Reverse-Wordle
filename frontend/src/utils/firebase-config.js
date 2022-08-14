@@ -25,6 +25,14 @@ const uiConfig = {
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
   ],
+  callbacks: {
+    signInSuccessWithAuthResult: () => false,
+  },
 }
 
-export default uiConfig
+const auth = firebase.auth()
+
+export {
+  auth,
+  uiConfig,
+}

@@ -1,15 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import firebase from 'firebase/compat/app'
-import uiConfig from './utils/firebase-config'
+import { auth, uiConfig } from './utils/firebase-config'
 import logger from './utils/logger'
 
 const App = () => {
   logger.info('App')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const unregisterAuthObserver = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(!!user)
+    })
+    return () => unregisterAuthObserver()
+  }, [])
+
   return (
     <>
       <h1>hi</h1>
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+      {
+        isLoggedIn
+          ? (
+            <>
+              {`${auth.currentUser.email} `}
+              <button type="button" onClick={() => auth.signOut()}>Log Out</button>
+            </>
+          )
+          : <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+      }
     </>
   )
 }
