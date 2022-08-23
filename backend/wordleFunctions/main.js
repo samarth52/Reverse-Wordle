@@ -1,29 +1,48 @@
 const logger = require('../utils/logger')
-const tileParser = require('./parse')
-const regexBuilder = require('./regex')
+const { messageParser, guessParser } = require('./parse')
+const { regexBuilder } = require('./regex')
 const wordleSimulator = require('./simulator')
 const webScraper = require('./webScraper')
 
-const main = async (answer, guess) => {
+const main = async (shareMessage, guess) => {
   // const word = 'gnawn'
-  const tiles = wordleSimulator(answer, guess)
-  const tilePositions = tileParser(tiles)
-  const regex = regexBuilder(answer, tilePositions)
-  logger.info(regex)
-  logger.info(regex.test(guess))
+  const parsedMessage = messageParser(shareMessage)
+  if (!parsedMessage.success) {
+    return parsedMessage
+  }
 
-  const { words } = await webScraper()
-  const filtered = words.filter(
-    (word) => regex.test(word) && wordleSimulator(answer, word) === tiles,
+  const scraped = await webScraper()
+  const answer = scraped.answers[parsedMessage.day]
+  logger.info(answer)
+  const firstGuess = parsedMessage.guesses[0]
+  const tilePositions = guessParser(firstGuess)
+  const filterRegex = regexBuilder(answer, tilePositions)
+  logger.info(filterRegex)
+  logger.info(filterRegex.test(guess))
+
+  const { words } = scraped
+  logger.info(words.includes(guess))
+  const filteredWords = words.filter(
+    (word) => filterRegex.test(word) && wordleSimulator(word, answer) === firstGuess,
   )
-  logger.info(filtered)
-  logger.info(filtered.includes(guess))
+  logger.info(filteredWords)
+  logger.info(filteredWords.includes(guess))
+  return {
+    success: true,
+    words: filteredWords,
+  }
 }
 
 // main('⬛⬛⬛⬛⬛')
 // main('🟨⬛🟨🟨⬛')
 // main('gnawn', 'ginny')
-main('funny', 'union')
+// main('funny', 'union')
+main(`Wordle 429 4/6*
+
+⬛⬛⬛🟨🟨
+⬛🟨🟨⬛⬛
+⬛🟩🟩🟩⬛
+🟩🟩🟩🟩🟩`, 'soare')
 // main('unfit', 'unite')
 // main('🟩⬛🟨🟨🟨')
 // main('🟩🟩🟩🟩🟩')

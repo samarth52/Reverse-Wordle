@@ -13,7 +13,7 @@ const messageValidator = (message) => {
     const guesses = message.match(CAPTURE_GUESSES_REGEX)
     logger.info('guesses', guesses)
     result.success = true
-    result.day = matches[1]
+    result.day = Number.parseInt(matches[1], 10)
     result.guesses = guesses
   }
   return result

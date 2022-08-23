@@ -22,7 +22,7 @@ const messageParser = (message) => {
   return result
 }
 
-const tileParser = (tiles) => {
+const guessParser = (tiles) => {
   const tilePositions = {
     green: [],
     yellow: [],
@@ -43,12 +43,12 @@ const tileParser = (tiles) => {
 
 module.exports = {
   messageParser,
-  tileParser,
+  guessParser,
 }
 
-messageParser(`Wordle 429 4/6*
-
-⬛⬛⬛🟨🟨
-⬛🟨🟨⬛⬛
-⬛🟩🟩🟩⬛
-🟩🟩🟩🟩🟩`)
+// messageParser(`Wordle 429 4/6*
+//
+// ⬛⬛⬛🟨🟨
+// ⬛🟨🟨⬛⬛
+// ⬛🟩🟩🟩⬛
+// 🟩🟩🟩🟩🟩`)
