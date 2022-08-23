@@ -18,15 +18,14 @@ const main = async (shareMessage, guess) => {
   const tilePositions = guessParser(firstGuess)
   const filterRegex = regexBuilder(answer, tilePositions)
   logger.info(filterRegex)
-  logger.info(filterRegex.test(guess))
+  logger.info(filterRegex.test(guess)) // temporary line to test function
 
   const { words } = scraped
-  logger.info(words.includes(guess))
   const filteredWords = words.filter(
     (word) => filterRegex.test(word) && wordleSimulator(word, answer) === firstGuess,
   )
   logger.info(filteredWords)
-  logger.info(filteredWords.includes(guess))
+  logger.info(filteredWords.includes(guess)) // temporary line to test function
   return {
     success: true,
     words: filteredWords,
