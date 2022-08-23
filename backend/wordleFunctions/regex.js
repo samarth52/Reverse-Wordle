@@ -1,4 +1,23 @@
+/* eslint-disable prefer-destructuring */
 const logger = require('../utils/logger')
+
+const MESSAGE_VALIDATION_REGEX = /^Wordle ([0-9]{3}) [1-6|X]\/6\*?\n\n(?:[byg]{5}\n?){1,6}$/
+const CAPTURE_GUESSES_REGEX = /[byg]{5}/gm
+const messageValidator = (message) => {
+  const matches = MESSAGE_VALIDATION_REGEX.exec(message)
+  logger.info('matches', matches)
+  const result = {}
+  if (matches === null) {
+    result.success = false
+  } else {
+    const guesses = message.match(CAPTURE_GUESSES_REGEX)
+    logger.info('guesses', guesses)
+    result.success = true
+    result.day = matches[1]
+    result.guesses = guesses
+  }
+  return result
+}
 
 const remainingLetters = (answer, tilePositions, index) => {
   let letters = ''
@@ -25,4 +44,7 @@ const regexBuilder = (answer, tilePositions) => {
   return RegExp(regexArray.join(''))
 }
 
-module.exports = regexBuilder
+module.exports = {
+  messageValidator,
+  regexBuilder,
+}

@@ -6,6 +6,11 @@ import logger from './utils/logger'
 const App = () => {
   logger.info('App')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [shareMessage, setShareMessage] = useState(null)
+
+  const handleChange = (event) => {
+    setShareMessage(event.target.value)
+  }
 
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged((user) => {
@@ -27,6 +32,7 @@ const App = () => {
             <>
               {`${auth.currentUser.email} `}
               <button type="button" onClick={() => auth.signOut()}>Log Out</button>
+              <input onChange={handleChange} value={shareMessage} />
             </>
           )
           : <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
