@@ -8,10 +8,10 @@ const guessSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  attempts: [mongoose.Schema.Types.Mixed],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  guesses: [[mongoose.Schema.Types.Mixed]],
+  userId: {
+    type: String,
+    required: true,
   },
 })
 

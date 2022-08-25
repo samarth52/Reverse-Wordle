@@ -1,4 +1,4 @@
-// const logger = require('../utils/logger')
+const logger = require('../utils/logger')
 
 const simulator = (guess, answer) => {
   // logger.info(guess, answer)
@@ -23,7 +23,9 @@ const simulator = (guess, answer) => {
   }
 
   const toReturn = tiles.join('')
-  // logger.info(toReturn)
+  if (guess === 'soare') {
+    logger.info(toReturn)
+  }
   return toReturn
 }
 

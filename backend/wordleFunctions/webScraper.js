@@ -13,9 +13,8 @@ const webScraper = async () => {
   answers = answers[1].split(',').map((word) => word.slice(1, -1))
   words = words.concat(answers)
   // logger.info(words)
-  // logger.info(answers)
   // logger.info(answers[416])
-  return { answers, words }
+  return { words, answers }
 }
 
 module.exports = webScraper
