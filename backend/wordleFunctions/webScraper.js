@@ -1,6 +1,15 @@
 /* eslint-disable no-restricted-syntax */
 const axios = require('axios')
+const mongoose = require('mongoose')
+const { MONGODB_URI } = require('../utils/envConfig')
+const Word = require('../models/word')
 const logger = require('../utils/logger')
+
+logger.info('Connecting to MongoDB')
+const mongooseConnection = mongoose
+  .connect(MONGODB_URI)
+  .then(() => logger.info('MongoDB Connected!'))
+  .catch((error) => logger.error(`Error connecting to MongoDB, ${error.message}`))
 
 const webScraper = async () => {
   const script = await axios({
@@ -74,7 +83,14 @@ const wordsRanker = async () => {
   keys.forEach((score) => finalRankedWords.push(reversedRankedWords[score]))
   logger.info(finalRankedWords)
 
-  return { words: finalRankedWords, answers }
+  const toSave = new Word({ scraped: { words: finalRankedWords, answers } })
+  await mongooseConnection
+  await Word.deleteOne({})
+  await toSave.save()
+  logger.info('saved')
+
+  await mongoose.connection.close()
+  logger.info('MongoDB connection closed')
 }
 
-module.exports = wordsRanker
+wordsRanker()

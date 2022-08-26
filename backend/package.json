@@ -6,8 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=PROD node index.js",
     "dev": "cross-env NODE_ENV=DEV nodemon index.js",
-    "main": "nodemon wordleFunctions/main.js",
-    "parse": "nodemon wordleFunctions/parse.js",
+    "scraper:prod": "cross-env NODE_ENV=PROD node wordleFunctions/webScraper.js",
+    "scraper:dev": "cross-env NODE_ENV=DEV node wordleFunctions/webScraper.js",
     "firebaseConfig": "cross-env NODE_ENV=DEV nodemon utils/firebaseConfig.js",
     "test": "jest --verbose --runInBand",
     "build:ui": "shx rm -rf build && cd ../frontend && npm run build && shx cp -r build ../backend",

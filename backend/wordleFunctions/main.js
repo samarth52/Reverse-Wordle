@@ -1,11 +1,10 @@
 const logger = require('../utils/logger')
 const { messageParser, guessParser } = require('./parse')
 const { regexBuilder } = require('./regex')
-const { getPreviousGuesses, saveGuess } = require('../utils/mongoFunctions')
+const { getWords, getPreviousGuesses, saveGuess } = require('../utils/mongoFunctions')
 const wordleSimulator = require('./simulator')
-const wordsRanker = require('./webScraper')
 
-const scraped = wordsRanker()
+const scraped = getWords()
 
 const filterWords = (words, guess) => {
   const [answer, regex, firstGuess] = guess
@@ -17,8 +16,8 @@ const filterWords = (words, guess) => {
 }
 
 const main = async (userId, name, shareMessage, guessTrial) => {
-  const { answers } = await scraped
-  let { words } = await scraped
+  let words = (await scraped).get('words')
+  const answers = (await scraped).get('answers')
   logger.info(words)
   logger.info('soare included?', words.includes('soare'))
   logger.info('soare index (if included)?', words?.indexOf('soare'))

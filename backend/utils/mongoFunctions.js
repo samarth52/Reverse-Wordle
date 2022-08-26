@@ -1,6 +1,12 @@
+const Word = require('../models/word')
 const User = require('../models/user')
 const Guess = require('../models/guess')
 const logger = require('./logger')
+
+const getWords = async () => {
+  const record = await Word.findOne({})
+  return record?.scraped
+}
 
 const saveUser = async (userId) => {
   const newUser = new User({ userId })
@@ -10,7 +16,6 @@ const saveUser = async (userId) => {
 
 const getPreviousGuesses = async (userId, name) => {
   const record = await Guess.findOne({ name, userId })
-  // logger.info('records', record)
   return record?.guesses
 }
 
@@ -42,6 +47,7 @@ const saveGuess = async (userId, name, prevGuesses, newGuess) => {
 }
 
 module.exports = {
+  getWords,
   saveUser,
   getPreviousGuesses,
   saveGuess,
