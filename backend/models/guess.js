@@ -6,7 +6,6 @@ const guessSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   guesses: [[mongoose.Schema.Types.Mixed]],
   userId: {

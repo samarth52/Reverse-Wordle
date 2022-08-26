@@ -7,16 +7,41 @@ import logger from './utils/logger'
 const App = () => {
   logger.info('App')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [name, setName] = useState('')
   const [shareMessage, setShareMessage] = useState('')
 
-  const handleChange = (event) => {
+  const handleNameChange = (event) => {
+    setName(event.target.value)
+  }
+
+  const handleMessageChange = (event) => {
     setShareMessage(event.target.value)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    logger.info(shareMessage)
-    axios.post('/api/wordle', { shareMessage })
+    if (name && shareMessage) {
+      const toSend = {
+        idToken: await auth.currentUser.getIdToken(),
+        name,
+        shareMessage,
+      }
+      logger.info(toSend)
+      axios.post('/api/wordle', toSend)
+    } else {
+      logger.info('missing params')
+    }
+  }
+
+  const handleClick = async (event) => {
+    event.preventDefault()
+    axios.post(
+      '/api/wordle/deleteAll',
+      {
+        idToken: await auth.currentUser.getIdToken(),
+        name,
+      },
+    )
   }
 
   useEffect(() => {
@@ -26,9 +51,9 @@ const App = () => {
     return () => unregisterAuthObserver()
   }, [])
 
-  auth.currentUser?.getIdToken().then((idToken) => {
-    logger.info('in App.js', idToken)
-  })
+  // auth.currentUser?.getIdToken().then((idToken) => {
+  //   logger.info('in App.js', idToken)
+  // })
 
   return (
     <>
@@ -40,9 +65,12 @@ const App = () => {
               {`${auth.currentUser.email} `}
               <button type="button" onClick={() => auth.signOut()}>Log Out</button>
               <form onSubmit={handleSubmit}>
-                <textarea onChange={handleChange} value={shareMessage} placeholder="enter guess" />
+                <input onChange={handleNameChange} value={name} placeholder="enter name" />
+                <br />
+                <textarea onChange={handleMessageChange} value={shareMessage} placeholder="enter guess" />
                 <button type="submit">Submit</button>
               </form>
+              <button type="button" onClick={handleClick}>Delete Guesses</button>
             </>
           )
           : <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />

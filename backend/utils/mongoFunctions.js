@@ -14,6 +14,10 @@ const saveUser = async (userId) => {
   logger.info('user added')
 }
 
+const removeGuesses = async (userId, name) => {
+  await Guess.deleteOne({ name, userId })
+}
+
 const getPreviousGuesses = async (userId, name) => {
   const record = await Guess.findOne({ name, userId })
   return record?.guesses
@@ -49,6 +53,7 @@ const saveGuess = async (userId, name, prevGuesses, newGuess) => {
 module.exports = {
   getWords,
   saveUser,
+  removeGuesses,
   getPreviousGuesses,
   saveGuess,
 }
