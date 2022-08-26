@@ -1,4 +1,3 @@
-const logger = require('../utils/logger')
 const { messageValidator } = require('./regex')
 
 const messageParser = (message) => {
@@ -16,9 +15,7 @@ const messageParser = (message) => {
   })
 
   const convertedMessage = convertedArray.join('')
-  logger.info(convertedMessage)
   const result = messageValidator(convertedMessage)
-  logger.info(result)
   return result
 }
 
@@ -37,7 +34,6 @@ const guessParser = (tiles) => {
       tilePositions.black.push(i)
     }
   })
-  logger.info(tiles, tilePositions)
   return tilePositions
 }
 
@@ -45,10 +41,3 @@ module.exports = {
   messageParser,
   guessParser,
 }
-
-// messageParser(`Wordle 429 4/6*
-//
-// ⬛⬛⬛🟨🟨
-// ⬛🟨🟨⬛⬛
-// ⬛🟩🟩🟩⬛
-// 🟩🟩🟩🟩🟩`)

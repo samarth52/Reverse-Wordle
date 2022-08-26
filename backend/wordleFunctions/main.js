@@ -1,13 +1,15 @@
 const logger = require('../utils/logger')
 const { messageParser, guessParser } = require('./parse')
 const { regexBuilder } = require('./regex')
-const { getPreviousGuesses, saveAttempt } = require('../utils/mongoFunctions')
+const { getPreviousGuesses, saveGuess } = require('../utils/mongoFunctions')
 const wordleSimulator = require('./simulator')
-const webScraper = require('./webScraper')
+const wordsRanker = require('./webScraper')
 
-const scraped = webScraper()
+const scraped = wordsRanker()
 
-const filterWords = (words, firstGuess, answer, regex) => {
+const filterWords = (words, guess) => {
+  const [answer, regex, firstGuess] = guess
+  logger.info('before filtering:', words, 'answer:', answer, 'regex:', regex, 'firstGuess:', firstGuess)
   const filteredWords = words.filter(
     (word) => regex.test(word) && wordleSimulator(word, answer) === firstGuess,
   )
@@ -18,34 +20,43 @@ const main = async (userId, name, shareMessage, guessTrial) => {
   const { answers } = await scraped
   let { words } = await scraped
   logger.info(words)
+  logger.info('soare included?', words.includes('soare'))
+  logger.info('soare index (if included)?', words?.indexOf('soare'))
 
   const parsedMessage = messageParser(shareMessage)
   if (!parsedMessage.success) {
     return parsedMessage
   }
   const firstGuess = parsedMessage.guesses[0]
+  logger.info('firstGuess tiles:', firstGuess)
 
   const prevGuesses = await getPreviousGuesses(userId, name)
   logger.info('prevGuesses', prevGuesses)
   prevGuesses?.forEach((guess) => {
-    words = filterWords(words, firstGuess, answers[guess[0]], guess[1])
+    words = filterWords(words, guess)
+    logger.info('filtering with:', guess, '| words:', words)
   })
-  logger.info('after prevGuess filtering', words)
+  // logger.info('after prevGuess filtering', words)
 
   const answer = answers[parsedMessage.day]
-  logger.info(answer)
+  logger.info('answer', answer)
   const tilePositions = guessParser(firstGuess)
   const filterRegex = regexBuilder(answer, tilePositions)
-  logger.info(filterRegex)
-  logger.info(filterRegex.test(guessTrial)) // temporary line to test function
+  // logger.info(filterRegex)
+  logger.info('check soare with filter:', filterRegex.test(guessTrial)) // temporary line to test function
 
-  const filteredWords = filterWords(words, firstGuess, answer, filterRegex)
+  const newGuess = [answer, filterRegex, firstGuess]
+
+  const filteredWords = filterWords(words, newGuess)
   logger.info(filteredWords)
   logger.info(filteredWords.includes(guessTrial)) // temporary line to test function
-  await saveAttempt(userId, name, prevGuesses, parsedMessage.day, filterRegex)
+
+  logger.info('best word:', filteredWords[0])
+
+  await saveGuess(userId, name, prevGuesses, newGuess)
   return {
     success: true,
-    words: filteredWords,
+    bestFirstWord: filteredWords[0],
   }
 }
 

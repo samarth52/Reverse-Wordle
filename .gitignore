@@ -26,5 +26,10 @@ frontend/yarn-error.log*
 */.env
 
 # firebase admin config
-/reverse-wordle-firebase-adminsdk-niea7-455d10bed1.json
-/test-reverse-wordle-firebase-adminsdk-fy4k6-8a48a7af7e.json
+reverse-wordle-firebase-adminsdk-niea7-455d10bed1.json
+test-reverse-wordle-firebase-adminsdk-fy4k6-8a48a7af7e.json
+
+# local python/conda
+environment.yml
+requirements.txt
+scraper

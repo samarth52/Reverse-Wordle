@@ -10,14 +10,13 @@ const saveUser = async (userId) => {
 
 const getPreviousGuesses = async (userId, name) => {
   const record = await Guess.findOne({ name, userId })
-  logger.info('records', record)
+  // logger.info('records', record)
   return record?.guesses
 }
 
-const saveAttempt = async (userId, name, prevGuesses, day, regex) => {
-  const newAttempt = [day, regex]
+const saveGuess = async (userId, name, prevGuesses, newGuess) => {
   if (prevGuesses) {
-    const newGuesses = [...prevGuesses, newAttempt]
+    const newGuesses = [...prevGuesses, newGuess]
     const newRecord = await Guess.findOneAndUpdate(
       { name, userId },
       { guesses: newGuesses },
@@ -25,12 +24,12 @@ const saveAttempt = async (userId, name, prevGuesses, day, regex) => {
     )
     logger.info('new guess added', newRecord)
   } else {
-    const newGuess = new Guess({
+    const newGuessObject = new Guess({
       name,
-      guesses: [newAttempt],
+      guesses: [newGuess],
       userId,
     })
-    const newRecord = await newGuess.save()
+    const newRecord = await newGuessObject.save()
     logger.info('new guess saved', newRecord)
     const user = await User.findOne({ userId })
     const updatedUser = await User.findOneAndUpdate(
@@ -45,5 +44,5 @@ const saveAttempt = async (userId, name, prevGuesses, day, regex) => {
 module.exports = {
   saveUser,
   getPreviousGuesses,
-  saveAttempt,
+  saveGuess,
 }
