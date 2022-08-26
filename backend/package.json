@@ -6,13 +6,14 @@
   "scripts": {
     "start": "cross-env NODE_ENV=PROD node index.js",
     "dev": "cross-env NODE_ENV=DEV nodemon index.js",
-    "main": "nodemon wordleFunctions/main.js",
-    "firebaseConfig": "cross-env NODE_ENV=DEV node utils/firebaseConfig.js",
+    "scraper:prod": "cross-env NODE_ENV=PROD node wordleFunctions/webScraper.js",
+    "scraper:dev": "cross-env NODE_ENV=DEV node wordleFunctions/webScraper.js",
+    "firebaseConfig": "cross-env NODE_ENV=DEV nodemon utils/firebaseConfig.js",
     "test": "jest --verbose --runInBand",
     "build:ui": "shx rm -rf build && cd ../frontend && npm run build && shx cp -r build ../backend",
     "commit:build": "npm run build:ui && git add .. && git commit -m uibuild && git push",
     "deploy": "cd .. && git subtree push --prefix backend heroku main",
-    "deploy:full": "npm run commit:build && npm run deploy",
+    "deploy:full": "npm run build:ui && git add .. && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"
   },
   "author": "Samarth Chandna",
@@ -31,6 +32,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "firebase-admin": "^11.0.1",
+    "mongoose": "^6.5.2",
     "shx": "^0.3.4"
   }
 }

@@ -1,29 +1,68 @@
 const logger = require('../utils/logger')
-const tileParser = require('./parse')
-const regexBuilder = require('./regex')
+const { messageParser, guessParser } = require('./parse')
+const { regexBuilder } = require('./regex')
+const { getWords, getPreviousGuesses, saveGuess } = require('../utils/mongoFunctions')
 const wordleSimulator = require('./simulator')
-const webScraper = require('./webScraper')
 
-const main = async (answer, guess) => {
-  // const word = 'gnawn'
-  const tiles = wordleSimulator(answer, guess)
-  const tilePositions = tileParser(tiles)
-  const regex = regexBuilder(answer, tilePositions)
-  logger.info(regex)
-  logger.info(regex.test(guess))
+const scraped = getWords()
 
-  const { words } = await webScraper()
-  const filtered = words.filter(
-    (word) => regex.test(word) && wordleSimulator(answer, word) === tiles,
+const filterWords = (words, guess) => {
+  const [answer, regex, firstGuess] = guess
+  logger.info('before filtering:', words, 'answer:', answer, 'regex:', regex, 'firstGuess:', firstGuess)
+  const filteredWords = words.filter(
+    (word) => regex.test(word) && wordleSimulator(word, answer) === firstGuess,
   )
-  logger.info(filtered)
-  logger.info(filtered.includes(guess))
+  return filteredWords
+}
+
+const main = async (userId, name, shareMessage, guessTrial) => {
+  let words = (await scraped).get('words')
+  const answers = (await scraped).get('answers')
+  logger.info(words)
+  logger.info('soare included?', words.includes('soare'))
+  logger.info('soare index (if included)?', words?.indexOf('soare'))
+
+  const parsedMessage = messageParser(shareMessage)
+  if (!parsedMessage.success) {
+    return parsedMessage
+  }
+  const firstGuess = parsedMessage.guesses[0]
+  logger.info('firstGuess tiles:', firstGuess)
+
+  const prevGuesses = await getPreviousGuesses(userId, name)
+  logger.info('prevGuesses', prevGuesses)
+  prevGuesses?.forEach((guess) => {
+    words = filterWords(words, guess)
+    logger.info('filtering with:', guess, '| words:', words)
+  })
+  // logger.info('after prevGuess filtering', words)
+
+  const answer = answers[parsedMessage.day]
+  logger.info('answer', answer)
+  const tilePositions = guessParser(firstGuess)
+  const filterRegex = regexBuilder(answer, tilePositions)
+  // logger.info(filterRegex)
+  logger.info('check soare with filter:', filterRegex.test(guessTrial)) // temporary line to test function
+
+  const newGuess = [answer, filterRegex, firstGuess]
+
+  const filteredWords = filterWords(words, newGuess)
+  logger.info(filteredWords)
+  logger.info(filteredWords.includes(guessTrial)) // temporary line to test function
+
+  logger.info('best word:', filteredWords[0])
+
+  await saveGuess(userId, name, prevGuesses, newGuess)
+  return {
+    success: true,
+    bestFirstWord: filteredWords[0],
+  }
 }
 
 // main('⬛⬛⬛⬛⬛')
 // main('🟨⬛🟨🟨⬛')
 // main('gnawn', 'ginny')
-main('funny', 'union')
+// main('funny', 'union')
 // main('unfit', 'unite')
 // main('🟩⬛🟨🟨🟨')
 // main('🟩🟩🟩🟩🟩')

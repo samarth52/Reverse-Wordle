@@ -7,7 +7,11 @@ admin.initializeApp({
 })
 
 const auth = admin.auth()
-auth
-  .verifyIdToken('test')
-  .then((decodedToken) => logger.info(decodedToken))
-module.exports = auth
+
+const decodeIdToken = async (idToken) => {
+  const decodedToken = await auth.verifyIdToken(idToken)
+  logger.info(decodedToken)
+  return decodedToken.user_id
+}
+
+module.exports = decodeIdToken
